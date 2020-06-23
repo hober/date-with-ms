@@ -1,7 +1,7 @@
 BINARY=date-with-ms
 
 $(BINARY): date-with-ms.c
-	clang $< -o $@
+	$(CC) $< -o $@
 
 # $SYSNAME is set in my shell config; it's where I put binaries I've
 # built myself.
