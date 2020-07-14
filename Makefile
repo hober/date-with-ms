@@ -1,13 +1,16 @@
 BINARY=date-with-ms
+MACHTYPE = $(shell uname -m | tr '[:upper:]' '[:lower:]')
+OSTYPE = $(shell uname -s | tr '[:upper:]' '[:lower:]')
+PREFIX ?= ~/$(MACHTYPE)-$(OSTYPE)
+EXEC_PREFIX ?= $(PREFIX)
+BINDIR ?= $(EXEC_PREFIX)/bin
 
 $(BINARY): date-with-ms.c
 	$(CC) $< -o $@
 
-# $SYSNAME is set in my shell config; it's where I put binaries I've
-# built myself.
 install: $(BINARY)
-	mkdir -p ~/${SYSNAME}/bin
-	cp $< ~/${SYSNAME}/bin
+	@mkdir -p $(BINDIR)
+	cp $< $(BINDIR)
 
 clean:
 	rm -f $(BINARY) *~
