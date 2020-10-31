@@ -1,19 +1,35 @@
-BINARY=date-with-ms
 MACHTYPE = $(shell uname -m | tr '[:upper:]' '[:lower:]')
 OSTYPE = $(shell uname -s | tr '[:upper:]' '[:lower:]')
-PREFIX ?= ~/$(MACHTYPE)-$(OSTYPE)
-EXEC_PREFIX ?= $(PREFIX)
-BINDIR ?= $(EXEC_PREFIX)/bin
+
+prefix ?= ~/$(MACHTYPE)-$(OSTYPE)
+exec_prefix ?= $(prefix)
+bindir ?= $(exec_prefix)/bin
+srcdir = .
+
+INSTALL = install -c
+INSTALL_PROGRAM = $(INSTALL)
+INSTALL_DATA = $(INSTALL) -m 644
+
+CC = cc
+
+BINARY=date-with-ms
+
+all: $(BINARY)
 
 $(BINARY): date-with-ms.c
 	$(CC) $< -o $@
 
-install: $(BINARY)
-	@mkdir -p $(BINDIR)
-	cp $< $(BINDIR)
+install: all installdirs
+	$(INSTALL_PROGRAM) $(BINARY) $(DESTDIR)$(bindir)/$(BINARY)
+
+installdirs:
+	mkdir -p $(DESTDIR)$(bindir)
+
+uninstall:
+	rm $(DESTDIR)$(bindir)/$(BINARY)
 
 clean:
 	rm -f $(BINARY) *~
 
-.PHONY: clean install
+.PHONY: all clean install installdirs
 
