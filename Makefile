@@ -1,3 +1,35 @@
+BINARY=date-with-ms.exe
+OBJFILE=date-with-ms.obj
+DELETE=del
+COPY=copy
+bindir=$(USERPROFILE)\amd64-windows_nt\bin\
+
+all: $(BINARY)
+
+clean:
+	$(DELETE) $(BINARY) $(OBJFILE)
+
+ifdef MAKEINFO:
+!ifndef MAKEINFO
+# nmake-only section
+
+.c.exe:
+	$(CC) $<
+
+install: $(bindir)\$(BINARY)
+
+$(bindir)\$(BINARY): $(BINARY)
+	$(COPY) $(BINARY) $(bindir)
+
+!else
+else
+# gmake-only section
+
+BINARY=date-with-ms
+OBJFILE=
+
+DELETE=rm
+
 MACHTYPE = $(shell uname -m | tr '[:upper:]' '[:lower:]')
 OSTYPE = $(shell uname -s | tr '[:upper:]' '[:lower:]')
 
@@ -9,12 +41,6 @@ srcdir = .
 INSTALL = install -c
 INSTALL_PROGRAM = $(INSTALL)
 INSTALL_DATA = $(INSTALL) -m 644
-
-CC = cc
-
-BINARY=date-with-ms
-
-all: $(BINARY)
 
 $(BINARY): date-with-ms.c
 	$(CC) $< -o $@
@@ -33,3 +59,5 @@ clean:
 
 .PHONY: all clean install installdirs
 
+endif
+!endif

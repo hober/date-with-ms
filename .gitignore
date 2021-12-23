@@ -1,2 +1,4 @@
 date-with-ms
+*.exe
+*.obj
 *~
